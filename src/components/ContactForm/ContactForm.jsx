@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Report } from 'notiflix/build/notiflix-report-aio';
-import { addContacts } from 'redux/contactsOperations';
-import { getItem } from 'redux/contactsSelector';
+import { addContacts } from 'redux/contacts/contactsOperations';
+import { getItem } from 'redux/contacts/contactsSelector';
 import s from './ContactForm.module.css';
 
 const ContactForm = ({ onSubmit }) => {

@@ -6,8 +6,8 @@ import { useEffect } from 'react';
 import Filter from './Filter/Filter';
 import Message from './Message/Message';
 import s from './App.module.css';
-import { getItem } from 'redux/contactsSelector';
-import { getContacts } from 'redux/contactsOperations';
+import { getItem } from 'redux/contacts/contactsSelector';
+import { getContacts } from 'redux/contacts/contactsOperations';
 
 const App = () => {
   const contacts = useSelector(getItem);
