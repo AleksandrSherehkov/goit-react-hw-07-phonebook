@@ -1,32 +1,60 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { getContacts, addContacts, removeContacts } from './contactsOperations';
 
 const contactsSlice = createSlice({
-  name: 'contacts',
-  initialState: { items: [], filter: '' },
+  name: 'items',
+  initialState: {
+    items: [],
+    filter: '',
+    isLoading: false,
+    error: null,
+  },
   reducers: {
-    addContact(state, { payload }) {
-      state.items.push(payload);
-    },
-    deleteContact(state, { payload }) {
-      state.items = state.items.filter(item => item.id !== payload);
-    },
     changeFilter(state, { payload }) {
-      state.filter = payload;
+      return { ...state, filter: payload };
+    },
+  },
+  extraReducers: {
+    [getContacts.pending]: (state, { payload }) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [getContacts.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.items = payload;
+    },
+    [getContacts.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    },
+
+    [addContacts.pending]: (state, { payload }) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [addContacts.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.items = [...state.items, payload];
+    },
+    [addContacts.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    },
+
+    [removeContacts.pending]: (state, { payload }) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [removeContacts.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.items = state.items.filter(item => item.id !== payload.id);
+    },
+    [removeContacts.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
     },
   },
 });
 
-const persistConfig = {
-  key: 'contacts',
-  storage,
-  blacklist: ['filter'],
-};
-
-export const persisteContactReducer = persistReducer(persistConfig, contactsSlice.reducer);
-
-export const { addContact, deleteContact, changeFilter } = contactsSlice.actions;
-
-export const getContacts = state => state.contacts.items;
-export const getFilter = state => state.contacts.filter;
+export const { changeFilter } = contactsSlice.actions;
+export default contactsSlice.reducer;

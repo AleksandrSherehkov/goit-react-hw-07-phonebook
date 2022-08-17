@@ -1,29 +1,31 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
-import s from './ContactForm.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { Report } from 'notiflix/build/notiflix-report-aio';
-import { addContact, getContacts } from 'redux/contactsSlice';
+import { addContacts } from 'redux/contactsOperations';
+import { getItem } from 'redux/contactsSelector';
+import s from './ContactForm.module.css';
 
 const ContactForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  const handleChangeName = e => setName(e.currentTarget.value);
-  const handleChangeNunber = e => setNumber(e.currentTarget.value);
-
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(getItem);
   const dispatch = useDispatch();
+
+  const handleChangeInput = e => {
+    const input = e.currentTarget;
+
+    input.name === 'name' && setName(input.value);
+    input.name === 'number' && setNumber(input.value);
+  };
 
   const handleSubmitForm = e => {
     e.preventDefault();
-
-    const newElement = { id: nanoid(), name, number };
+    const newElement = { name, number };
 
     contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase())
       ? Report.warning(`${name}`, 'This user is already in the contact list.', 'OK')
-      : dispatch(addContact(newElement));
+      : dispatch(addContacts(newElement));
 
     reset();
   };
@@ -40,7 +42,7 @@ const ContactForm = ({ onSubmit }) => {
         <input
           className={s.input}
           placeholder="Enter full name"
-          onChange={handleChangeName}
+          onChange={handleChangeInput}
           type="text"
           name="name"
           value={name}
@@ -54,7 +56,7 @@ const ContactForm = ({ onSubmit }) => {
         <input
           className={s.input}
           placeholder="Enter number"
-          onChange={handleChangeNunber}
+          onChange={handleChangeInput}
           type="tel"
           name="number"
           value={number}
@@ -70,7 +72,4 @@ const ContactForm = ({ onSubmit }) => {
   );
 };
 
-ContactForm.prototype = {
-  onSubmit: PropTypes.func.isRequired,
-};
 export default ContactForm;
