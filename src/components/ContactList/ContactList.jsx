@@ -13,11 +13,11 @@ const ContactList = () => {
 
   return (
     <ul>
-      {contacts.map(({ id, name, number }) => (
+      {contacts.map(({ id, name, phone }) => (
         <li className={s.item} key={id}>
           <Contact
             name={name}
-            number={number}
+            number={phone}
             onDeleteContact={() => deleteSelectedContact(id)}
             contactId={id}
           />
