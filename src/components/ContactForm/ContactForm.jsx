@@ -7,7 +7,7 @@ import s from './ContactForm.module.css';
 
 const ContactForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
 
   const contacts = useSelector(getItem);
   const dispatch = useDispatch();
@@ -16,12 +16,12 @@ const ContactForm = ({ onSubmit }) => {
     const input = e.currentTarget;
 
     input.name === 'name' && setName(input.value);
-    input.name === 'number' && setNumber(input.value);
+    input.name === 'phone' && setPhone(input.value);
   };
 
   const handleSubmitForm = e => {
     e.preventDefault();
-    const newElement = { name, number };
+    const newElement = { name, phone };
 
     contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase())
       ? Report.warning(`${name}`, 'This user is already in the contact list.', 'OK')
@@ -32,7 +32,7 @@ const ContactForm = ({ onSubmit }) => {
 
   const reset = () => {
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   return (
@@ -58,8 +58,8 @@ const ContactForm = ({ onSubmit }) => {
           placeholder="Enter number"
           onChange={handleChangeInput}
           type="tel"
-          name="number"
-          value={number}
+          name="phone"
+          value={phone}
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required

@@ -17,7 +17,7 @@ const ContactList = () => {
         <li className={s.item} key={id}>
           <Contact
             name={name}
-            number={phone}
+            phone={phone}
             onDeleteContact={() => deleteSelectedContact(id)}
             contactId={id}
           />
